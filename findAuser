@@ -1,0 +1,39 @@
+(async () => {
+  const nextButtonSelector = "#galaxyHeader > form > span.galaxy_icons.next.ipiHintable";
+  const inputSelector = "#system_input";
+  const textToFind = "------------------username";
+  const totalIterations = 200;
+
+  for (let iteration = 1; iteration <= totalIterations; iteration++) {
+    const nextBtn = document.querySelector(nextButtonSelector);
+    if (!nextBtn) {
+      console.warn("⚠️ Next button not found!");
+      break;
+    }
+    nextBtn.click();
+    
+    await new Promise(res => setTimeout(res, 300)); // adjust delay if needed
+
+    const systemInput = document.querySelector(inputSelector);
+    const systemValue = systemInput ? systemInput.value : "(no value)";
+    console.log(`🪐 Iteration ${iteration}: system_input = ${systemValue}`);
+
+    const foundRows = [];
+    for (let i = 1; i <= 200; i++) {
+      const row = document.querySelector(`#galaxyRow${i}`);
+      if (row && row.innerText.includes(textToFind)) {
+        console.log(`✅ Found "${textToFind}" in #galaxyRow${i} (iteration ${iteration})`);
+        foundRows.push(row);
+      }
+    }
+/*
+    if (foundRows.length === 0) {
+      console.log(`❌ "${textToFind}" not found (iteration ${iteration})`);
+    }
+*/
+    // Optional pause between iterations
+    await new Promise(res => setTimeout(res, 500));
+  }
+
+  console.log("🏁 Sequence completed.");
+})();
